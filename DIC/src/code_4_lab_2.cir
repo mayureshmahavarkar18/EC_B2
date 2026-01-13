@@ -1,0 +1,28 @@
+
+* SPICE netlist for LAB 2 (13-01-26) code 1
+.include "DIC Dataset/cmos_65nm.txt"
+M1 D G 0 0 pmos W=32u L=65n
+Vgs G 0 DC -1.2
+Vds D 0 DC -1.2
+
+* Simulation
+.dc Vds 0 -1.2 -0.01 Vgs 0 -1.2 -0.3
+.control 
+run
+set color0 = white
+set plotcolor = black
+set grid on
+set gridcolor = light-gray
+
+set xlabel="Vds (V)"
+set ylabel="Id (A)"
+set title="MOSFET I-V Characteristics"
+set linewidth 2
+
+plot -I(Vds)
+set hcopydevtype=svg
+* ensure the directory exists and create it if needed
+!mkdir -p "LAB_2-13_01_26/graphs/"
+hardcopy sample_pmos.svg I(Vds)
+.endc
+.end

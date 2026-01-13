@@ -1,0 +1,23 @@
+
+* SPICE netlist for LAB 2 (13-01-26) code 1
+.include "DIC Dataset/cmos_90nm.txt"
+M1 D G 0 0 nmos W=64n L=90n
+Vgs G 0 DC 1.2
+Vds D 0 DC 1.2
+
+* Simulation
+.dc Vds 0 1.2 0.01 Vgs 0 1.2 0.3
+.control 
+run
+set color0 = white
+set plotcolor = black
+set xlabel="Vds (V)"
+set ylabel="Id (A)"
+set title="MOSFET I-V Characteristics"
+set linewidth 2
+
+plot -I(Vds)
+set hcopydevtype=svg
+hardcopy mos_dc-90nm.svg -i(Vds)
+.endc
+.end
