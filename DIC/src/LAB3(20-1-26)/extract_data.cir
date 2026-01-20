@@ -1,0 +1,20 @@
+cmos_inverter
+
+.include cmos_65nm.txt
+
+M1 d g 0 0 nmos W = 32u L = 65n 
+VDD vdd 0 1.2
+Rl vdd d 10k
+vin g 0 1.2
+.dc vin 0 1.2 0.01
+
+.control 
+run
+set wr_singlescale
+set wr_vecnames
+option numdgt=6
+wrdata /tmp/circuit_data.txt v(g) v(d)
+quit
+.endc
+
+.end

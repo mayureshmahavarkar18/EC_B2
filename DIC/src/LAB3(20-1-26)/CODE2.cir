@@ -1,0 +1,21 @@
+
+cmos_inverter[U24EC123]
+
+.include cmos_65nm.txt
+
+M1 d g 0 0 nmos W = 32u L = 65n
+VDD vdd 0 1.2
+Rl vdd d 10k
+vin g 0 1.2
+.dc VIN 0 1.2 0.01
+//set color0= white
+.control 
+run
+plot v(d) v(g)
+set hcopydevtype = postscript
+set hcopydevtype = svg
+set color0= white
+hardcopy nmos_inverter_10k.ps v(d) v(g)
+hardcopy nmos_inverter_10k.svg v(d) v(g)
+.endc
+.end
