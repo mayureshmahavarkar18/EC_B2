@@ -1,0 +1,42 @@
+.title CMOS_INVERTER_U24EC123
+.include cmos_65nm.txt
+
+m2 out 0 a a pmos w=21u l=65n
+vdd a 0 1.2
+
+m1 out g 0 0 nmos w=32u l=65n
+vin g 0 1.2
+
+.dc vin 0 1.2 0.001
+
+.control
+run
+
+* ---- Plot VTC ----
+plot v(g) v(out)
+
+
+* ---- Derivative (Gain) ----
+let gain = deriv(v(out))
+* ---- Find VIL (1st slope = -1 crossing) ----
+meas dc VIL when gain=-1 cross=1
+* ---- Find VIH (2nd slope = -1 crossing) ----
+meas dc VIH when gain=-1 cross=2
+* ---- Find VOH and VOL ----
+meas dc VOH max v(out)
+meas dc VOL min v(out)
+* ---- Calculate Noise Margins ----
+let NMH = VOH - VIH
+let NML = VIL - VOL
+
+
+set color0 = white
+set color1 = black
+set xbrushwidth = 3
+set hcopydevtype = postscript 
+hardcopy test.ps v(g) v(out)
+
+print VOH VOL VIL VIH NMH NML
+
+.endc
+.end

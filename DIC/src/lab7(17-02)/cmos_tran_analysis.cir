@@ -1,0 +1,40 @@
+.title CMOS_INVERTER_U24EC123
+.include cmos_90nm.txt
+
+m2 out 0 a a pmos w=21u l=65n
+vdd a 0 1.2
+
+m1 out g 0 0 nmos w=32u l=65n
+
+*vin g 0 1.2
+*pulse(Vlow Vhigh delay rise fall on_time period)
+vin g 0 pulse(0 1.2 0 50n 50n 200n 500n)
+
+
+*.dc vin 0 1.2 0.001
+*.tran <time_step> <stop_time> [start_time] [max_step]
+.tran 20n 800n
+
+.control
+run
+
+* ---- Plot VTC ----
+plot v(g) v(out)
+
+* ---- Rise Time (10% to 90%) ----
+meas tran trise  TRIG v(out) VAL=0.12 RISE=1  TARG v(out) VAL=1.08 RISE=1
+
+* ---- Fall Time (90% to 10%) ----
+meas tran tfall  TRIG v(out) VAL=1.08 FALL=1  TARG v(out) VAL=0.12 FALL=1
+
+* Color the graph
+set color0 = white
+set color1 = black
+set xbrushwidth = 3
+set hcopydevtype = postscript 
+hardcopy cmos_tran_90n.ps v(g) v(out)
+
+print trise tfall
+
+.endc
+.end
